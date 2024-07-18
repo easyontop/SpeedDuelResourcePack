@@ -1,0 +1,124 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Texture Pack font/default.json Tab Completer",
+    "description": "Auto completes item for you in font/default.json",
+    "type": "object",
+    "properties": {
+        "providers": {
+            "description": "A list of providers that are merged onto this font.",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "description": "The type of the font provider.",
+                        "type": "string",
+                        "enum": [
+                            {
+                                "value": "bitmap",
+                                "description": "A bitmap font."
+                            },
+                            {
+                                "value": "legacy_unicode",
+                                "description": "A legacy unicode font. This format is deprecated, prioritizedonly when the \"Force Unicode Font\" option is turned on."
+                            },
+                            {
+                                "value": "ttf",
+                                "description": "A TrueType font or OpenType font. Despite its name, it supports both TTF and OTF."
+                            },
+                            {
+                                "value": "space",
+                                "description": "Show chosen characters as spaces."
+                            }
+                        ]
+                    }
+                },
+                "additionalProperties": false,
+                "oneOf": [
+                    {
+                        "properties": {
+                            "type": {
+                                "const": "bitmap"
+                            },
+                            "file": {
+                                "type": "string",
+                                "description": "The resource location of the used file, strating from `assets/minecraft/textures` by default. Prefacing the location with `<namespace>:` changes the location to `assets/<namespace>/textures`."
+                            },
+                            "height": {
+                                "type": "integer",
+                                "description": "The height of the character, measured in pixels. Can benegative. This tag is seperate from the area used in the source texture and justrescales the displayed result. Default is 8."
+                            },
+                            "ascent": {
+                                "type": "integer",
+                                "description": "The ascent of the character, measured in pixels. This value adds avertical shift to the displayed result."
+                            },
+                            "chars": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "description": "A list of strings containing the characters replaced by this provider, as well as their order within the texture. All elements must describe the same number of characters. The texture is split into one equally sized row for each element of this list. Each row is split into one equally sized character for each character within one list element."
+                            }
+                        },
+                        "required": [
+                            "file",
+                            "chars"
+                        ]
+                    },
+                    {
+                        "properties": {
+                            "type": {
+                                "const": "legacy_unicode"
+                            },
+                            "sizes": {
+                                "type": "string",
+                                "description": "The resource location of a binary file describing the horizontal start and end positions for each character from 0 to 15. The file extension of the target file should be `.bin`. The resource location path is relative to the namespace root."
+                            },
+                            "template": {
+                                "type": "string",
+                                "description": "The resource location inside `assets/<namespace>/textures` that leads to the texture files that should be used for this provider. The game replaces `%s` from the value of this tag with the first two characters of the hex code of the replaced characters, so a single provider of this type can point into multiple texture files."
+                            }
+                        },
+                        "required": [
+                            "sizes",
+                            "template"
+                        ]
+                    },
+                    {
+                        "properties": {
+                            "type": {
+                                "const": "ttf"
+                            },
+                            "file": {
+                                "type": "string",
+                                "description": "The resource location of the TrueType/OpenType font file within `assets/<namespace>/font`."
+                            },
+                            "size": {
+                                "type": "number",
+                                "description": "Font size to render at."
+                            }
+                        },
+                        "required": [
+                            "file",
+                            "size"
+                        ]
+                    },
+                    {
+                        "properties": {
+                            "type": {
+                                "const": "space"
+                            },
+                            "advances": {
+                                "type": "object",
+                                "additionalProperties": {
+                                    "type": "string",
+                                    "pattern": "^[0-9]+$"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
